@@ -26,9 +26,6 @@ p.selected {
     padding: 0px;
     margin-top: 5px;
     line-height: 1.6; /* 增加行距 */
-    max-height: calc(100vh - 150px); /* 適應螢幕高度，留空間給書卷和章節選擇 */
-    overflow-y: auto; /* 啟用垂直滾動 */
-    -webkit-overflow-scrolling: touch; /* 改善手機滾動流暢度 */
 }
 
 
