@@ -2,7 +2,13 @@ body {
     font-family: sans-serif;
     padding: 8px; 
     font-size: 1.2rem; 
-    position: relative; /* 新增定位上下文 */
+    display: flex;          /* 新增 */
+    flex-direction: column; /* 新增 */
+    height: 100vh;          /* 新增 */
+    margin: 0;              /* 新增 */
+}
+
+
 } 
 
 h1 { /* 台語快讀聖經 v1.0 */
@@ -24,16 +30,10 @@ p.selected {
 }
 
 #bibleText {
-    overflow-y: scroll; /* 保持可滾動 */
-    -webkit-overflow-scrolling: touch; /* iOS 慣性滾動 */
-    scrollbar-width: none; /* Firefox 隱藏滾動條 */
-    max-height: calc(100vh - 160px); /* 動態計算可視高度 */
-    /*
-    border: none; 
-    padding: 0px;
-    margin-top: 5px;
-    line-height: 1.6;
-    */ 
+    flex: 1;                /* 新增 */
+    overflow-y: auto;       /* 修改 */
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 20px;   /* 新增底部留白 */
 }
 
 /* 隱藏 Webkit 系瀏覽器的滾動條 */
