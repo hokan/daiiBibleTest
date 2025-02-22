@@ -17,5 +17,5 @@
       "sizes": "512x512"
     }
   ],
-  "orientation": "portrait" // 锁定竖屏方向
+  "orientation": "portrait" 
 }
