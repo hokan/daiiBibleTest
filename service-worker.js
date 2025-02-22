@@ -1,5 +1,5 @@
 // service-worker.js 改进版本
-const CACHE_NAME = 'daii-bible-v1.11-sw'; // 每次更新需修改版本号
+const CACHE_NAME = 'daii-bible-v1.11-no-copy'; // 修改版本号
 
 self.addEventListener('install', event => {
   event.waitUntil(

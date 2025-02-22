@@ -37,6 +37,7 @@ p.selected {
     overflow-y: scroll; /* 改为scroll强制显示滚动机制 */
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
+    touch-action: pan-y; /* 确保垂直滚动 */
 }
 
 /* 新增body高度设定 */

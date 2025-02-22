@@ -77,6 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 };
                         
                                 // 長按複製處理 (保持原有不變)
+                                /*
                                 const handleLongPress = (verseElement) => {
                                     let pressTimer;
                                     
@@ -103,6 +104,8 @@ document.addEventListener('DOMContentLoaded', function() {
                                     verseElement.addEventListener('mouseup', endHandler);
                                     verseElement.addEventListener('mouseleave', endHandler);
                                 };
+                                */
+
                         
                                 // 綁定事件
                                 verses.forEach(verseElement => {
@@ -176,7 +179,7 @@ function showCopiedToast() {
 // 在文件末尾添加以下代码
 let touchStartY = 0;
 const bibleTextDiv = document.getElementById('bibleText');
-
+/*
 bibleTextDiv.addEventListener('touchstart', e => {
     touchStartY = e.touches[0].clientY;
 }, { passive: true });
@@ -188,3 +191,4 @@ bibleTextDiv.addEventListener('touchmove', e => {
         e.stopPropagation();
     }
 }, { passive: false });
+*/
