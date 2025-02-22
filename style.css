@@ -19,6 +19,7 @@ p.selected {
     margin-top: 0em;      /* 新增：設定上外邊距為 0 */
     margin-bottom: 0.1em;   /* 保持原設定：設定下外邊距為 0 */
     user-select: none; /* 全域禁用經文段落文字選取 */
+    cursor: pointer; /* 新增指標樣式提示可點擊 */
 }
 
 #bibleText {
@@ -28,4 +29,25 @@ p.selected {
     line-height: 1.6; /* 增加行距 */
 }
 
+/* 新增在最下方 */
+.toast {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-size: 0.9em;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    z-index: 1000;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.toast.show {
+    opacity: 1;
+}
 
