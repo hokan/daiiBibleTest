@@ -1,0 +1,34 @@
+body {
+    font-family: sans-serif;
+    padding: 8px; /* 文字四周空白改小 */
+    font-size: 1.2rem; /*  設定 body 預設字體大小為 1.1rem */
+}
+
+h1 { /* 台語快讀聖經 v1.0 */
+    font-size: 1.8em;
+    margin-bottom: 5px;
+    margin-top: 5px;  /*  修改後的上邊距設定，縮小為一半 (15px)  */
+}
+
+p.selected {
+    background-color: #ffffcc !important; /* 強制覆蓋其他樣式 */
+    user-select: none; /* 禁用文字選取效果 */
+}
+
+#bibleText p {
+    margin-top: 0em;      /* 新增：設定上外邊距為 0 */
+    margin-bottom: 0.1em;   /* 保持原設定：設定下外邊距為 0 */
+    user-select: none; /* 全域禁用經文段落文字選取 */
+}
+
+#bibleText {
+    border: none; /* 1px solid #ccc;  外框樣式設定 */
+    padding: 0px;
+    margin-top: 5px;
+    line-height: 1.6; /* 增加行距 */
+    max-height: calc(100vh - 150px); /* 適應螢幕高度，留空間給書卷和章節選擇 */
+    overflow-y: auto; /* 啟用垂直滾動 */
+    -webkit-overflow-scrolling: touch; /* 改善手機滾動流暢度 */
+}
+
+
