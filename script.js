@@ -49,11 +49,24 @@ document.addEventListener('DOMContentLoaded', function() {
                             const selectedBook = bookSelect.value;
                             const selectedChapter = chapterButton.textContent;
                             const bibleTextDiv = document.getElementById('bibleText');
-                        
+
+                            // 新增滚动位置重置
+                            bibleTextDiv.scrollTop = 0; // <-- 新增此行                            
+                            
                             if (bibleData[selectedBook] && bibleData[selectedBook][selectedChapter]) {
-                                const chapterVerses = bibleData[selectedBook][selectedChapter];
-                                bibleTextDiv.innerHTML = chapterVerses.map(verse => `<p>${verse}</p>`).join('');
-                        
+                                // 改用createDocumentFragment优化
+                                const fragment = document.createDocumentFragment();
+                                bibleData[selectedBook][selectedChapter].forEach(verse => {
+                                    const p = document.createElement('p');
+                                    p.textContent = verse;
+                                    fragment.appendChild(p);
+                                });
+                                
+                                // 清空并添加新内容
+                                bibleTextDiv.innerHTML = '';
+                                bibleTextDiv.appendChild(fragment);
+                                
+
                                 // 綁定事件的新寫法
                                 const verses = bibleTextDiv.querySelectorAll('p');
                                 
@@ -159,3 +172,19 @@ function showCopiedToast() {
         setTimeout(() => toast.remove(), 300); // 等待動畫結束後移除元素
     }, 3000);
 }
+
+// 在文件末尾添加以下代码
+let touchStartY = 0;
+const bibleTextDiv = document.getElementById('bibleText');
+
+bibleTextDiv.addEventListener('touchstart', e => {
+    touchStartY = e.touches[0].clientY;
+}, { passive: true });
+
+bibleTextDiv.addEventListener('touchmove', e => {
+    const touchY = e.touches[0].clientY;
+    // 垂直滑动检测
+    if (Math.abs(touchY - touchStartY) > 10) {
+        e.stopPropagation();
+    }
+}, { passive: false });
