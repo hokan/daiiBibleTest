@@ -1,8 +1,9 @@
 body {
     font-family: sans-serif;
-    padding: 8px; /* 文字四周空白改小 */
-    font-size: 1.2rem; /*  設定 body 預設字體大小為 1.1rem */
-}
+    padding: 8px; 
+    font-size: 1.2rem; 
+    position: relative; /* 新增定位上下文 */
+} 
 
 h1 { /* 台語快讀聖經 v1.0 */
     font-size: 1.8em;
@@ -23,10 +24,21 @@ p.selected {
 }
 
 #bibleText {
-    border: none; /* 1px solid #ccc;  外框樣式設定 */
+    overflow-y: scroll; /* 保持可滾動 */
+    -webkit-overflow-scrolling: touch; /* iOS 慣性滾動 */
+    scrollbar-width: none; /* Firefox 隱藏滾動條 */
+    max-height: calc(100vh - 160px); /* 動態計算可視高度 */
+    /*
+    border: none; 
     padding: 0px;
     margin-top: 5px;
-    line-height: 1.6; /* 增加行距 */
+    line-height: 1.6;
+    */ 
+}
+
+/* 隱藏 Webkit 系瀏覽器的滾動條 */
+#bibleText::-webkit-scrollbar {
+    display: none;
 }
 
 /* 新增在最下方 */
