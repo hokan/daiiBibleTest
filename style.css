@@ -15,9 +15,15 @@ h1 { /* 台語快讀聖經 v1.0 */
     margin-top: 5px;  /*  修改後的上邊距設定，縮小為一半 (15px)  */
 }
 
+/* 添加以下樣式 */
 p.selected {
-    background-color: #ffffcc !important; /* 強制覆蓋其他樣式 */
-    user-select: none; /* 禁用文字選取效果 */
+    background-color: #b3d4ff !important; /* 強制覆蓋預設樣式 */
+    transition: background-color 0.3s ease; /* 平滑過渡效果 */
+}
+
+/* 禁用瀏覽器默認點擊高亮 */
+* {
+    -webkit-tap-highlight-color: transparent;
 }
 
 #bibleText p {

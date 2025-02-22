@@ -70,11 +70,32 @@ document.addEventListener('DOMContentLoaded', function() {
                                 // 綁定事件的新寫法
                                 const verses = bibleTextDiv.querySelectorAll('p');
                                 
-                                // 點擊高亮處理 (修正版)
+                                // 修改點擊高亮處理函數
                                 const handleClick = (clickedVerse) => {
-                                    verses.forEach(v => v.classList.remove('selected'));
-                                    clickedVerse.classList.add('selected');
+                                    // 添加防抖處理
+                                    if (this.clickTimeout) clearTimeout(this.clickTimeout);
+                                    
+                                    // 立即移除其他高亮
+                                    verses.forEach(v => {
+                                        if (v !== clickedVerse) v.classList.remove('selected');
+                                    });
+                                    
+                                    // 延遲添加高亮以區分滾動操作
+                                    this.clickTimeout = setTimeout(() => {
+                                        clickedVerse.classList.add('selected');
+                                    }, 50); // 50ms 延遲可區分輕觸與滾動
                                 };
+                                // 修改事件綁定方式 (替換原有綁定代碼)
+                                verses.forEach(verseElement => {
+                                    // 統一使用 touchstart 事件
+                                    verseElement.addEventListener('touchstart', (e) => {
+                                        e.preventDefault();
+                                        handleClick(verseElement);
+                                    }, { passive: false });
+                                    
+                                    // 保留桌面端 click 事件
+                                    verseElement.addEventListener('click', () => handleClick(verseElement));
+                                });
                         
                                 // 長按複製處理 (保持原有不變)
                                 /*
@@ -113,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                     verseElement.addEventListener('click', () => handleClick(verseElement));
                                     
                                     // 長按事件
-                                    handleLongPress(verseElement);
+                                    // handleLongPress(verseElement);
                                 });
                             }
 
