@@ -5,6 +5,8 @@ body {
     padding: 0;
     background-color: #f9f9f9;
     color: #333;
+    font-size: 1.2rem; /*  設定 body 預設字體大小為 1.1rem */
+
 }
 
 header {
@@ -12,6 +14,12 @@ header {
     color: white;
     padding: 1rem;
     text-align: center;
+}
+
+h1 { /* 台語快讀聖經 v1.0 */
+    font-size: 1.8em;
+    margin-bottom: 5px;
+    margin-top: 5px;  /*  修改後的上邊距設定，縮小為一半 (15px)  */
 }
 
 .controls {
@@ -40,7 +48,7 @@ main {
 }
 
 #bibleText p.selected {
-    background-color: #fffbe6;
+    background-color:  #ffffcc; /* #fffbe6; */
     border-color: #f5c518;
 }
 
