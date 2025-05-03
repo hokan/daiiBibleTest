@@ -1,84 +1,62 @@
+
 body {
-    font-family: sans-serif;
-    padding: 8px; 
-    font-size: 1.2rem; 
-    display: flex;          /* 新增 */
-    flex-direction: column; /* 新增 */
-    height: 100vh;          /* 新增 */
-    margin: 0;              /* 新增 */
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
 }
 
-
-h1 { /* 台語快讀聖經 v1.0 */
-    font-size: 1.8em;
-    margin-bottom: 5px;
-    margin-top: 5px;  /*  修改後的上邊距設定，縮小為一半 (15px)  */
+header {
+    background-color: #4a90e2;
+    color: white;
+    padding: 1rem;
+    text-align: center;
 }
 
-/* 修改或新增以下样式 */
-p.selected {
-    background-color: #fff3cd !important;  /* 淡黄色背景 */
-    color: #856404 !important;             /* 深褐色文字提高对比度 */
-    border-radius: 3px;                    /* 可选圆角效果 */
-    box-shadow: 0 0 2px rgba(0,0,0,0.1);   /* 可选轻微阴影 */
-    transition: background-color 0.3s ease;/* 平滑过渡效果 */
+.controls {
+    margin-top: 0.5rem;
 }
 
-/* 禁用移动端默认点击高亮 */
-* {
-    -webkit-tap-highlight-color: transparent;
+label, select {
+    margin: 0 0.5rem;
+}
+
+main {
+    padding: 1rem;
+}
+
+#chapterTitle {
+    text-align: center;
+    margin-bottom: 1rem;
 }
 
 #bibleText p {
-    margin-top: 0em;      /* 新增：設定上外邊距為 0 */
-    margin-bottom: 0.1em;   /* 保持原設定：設定下外邊距為 0 */
-    user-select: none; /* 全域禁用經文段落文字選取 */
-    cursor: pointer; /* 新增指標樣式提示可點擊 */
+    line-height: 1.4; /* 1.6 */
+    margin: 0.2rem 0;
+    padding: 0.2 rem;
+    border-left: 4px solid transparent;
+    transition: background-color 0.3s, border-color 0.3s;
 }
 
-/* 需添加/修改以下样式 */
-#bibleText {
-    border: none;
-    padding: 0px;
-    margin-top: 5px;
-    line-height: 1.6;
-    height: 70vh; /* 新增关键属性 */
-    overflow-y: scroll; /* 改为scroll强制显示滚动机制 */
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior: contain;
-    touch-action: pan-y; /* 确保垂直滚动 */
+#bibleText p.selected {
+    background-color: #fffbe6;
+    border-color: #f5c518;
 }
 
-/* 新增body高度设定 */
-html, body {
-    height: 100%;
-    margin: 0;
-}
-
-/* 隱藏 Webkit 系瀏覽器的滾動條 */
-#bibleText::-webkit-scrollbar {
-    display: none;
-}
-
-/* 新增在最下方 */
-.toast {
+#copy-toast {
     position: fixed;
-    top: 20%;
+    bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
     background: rgba(0, 0, 0, 0.8);
     color: white;
-    padding: 12px 24px;
-    border-radius: 25px;
-    font-size: 0.9em;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 9999;
     opacity: 0;
-    transition: opacity 0.3s;
-    pointer-events: none;
-    z-index: 1000;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-}
-
-.toast.show {
+    transition: opacity 0.3s ease;
+  }
+  #copy-toast.show {
     opacity: 1;
-}
-
+  }
