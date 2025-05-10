@@ -73,6 +73,10 @@ document.addEventListener('DOMContentLoaded', function() {
                             const selectedChapter = chapterButton.textContent;
                             const bibleTextDiv = document.getElementById('bibleText');
 
+                            // 新增：切換章節時重置選中狀態
+                            selectedVerseElement = null;
+                            bibleTextDiv.innerHTML = ''; 
+
                             // 只保留一個渲染方式 (移除 displayChapter 或下方的渲染程式碼)
                             if (bibleData[selectedBook] && bibleData[selectedBook][selectedChapter]) {
                                 const chapterVerses = bibleData[selectedBook][selectedChapter];
@@ -111,8 +115,9 @@ chapterVerses.forEach((verse, index) => {
     verseElement.addEventListener("touchstart", function(e) {
         if (e.touches.length !== 1) return; // 只處理單點觸控
 
-        // 若 selectedVerseElement 為 null（未點擊過任何段落）或非高亮段落 → 不執行
-        if (selectedVerseElement === null || verseElement !== selectedVerseElement) {
+        // 強化條件檢查 (確保是已選中段落)
+        if (!selectedVerseElement || verseElement !== selectedVerseElement) {
+            console.log('非高亮區域，取消長按操作');
             return;
         }
 
