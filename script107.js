@@ -22,6 +22,9 @@ function showCopyToast() {
     }, 2000);
 }
 
+// ===== 宣告變數用於追蹤選中的經文段落 =====
+let selectedVerseElement = null;
+
 document.addEventListener('DOMContentLoaded', function() {
 
     // ** 載入 JSON 聖經資料庫 **
@@ -75,12 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 const chapterVerses = bibleData[selectedBook][selectedChapter];
                                 let textContent = "";
                                 
-                                /* 加入複製功能
-                                chapterVerses.forEach(verse => {
-                                    textContent += `<p>${verse}</p>`;
-                                });
-                                bibleTextDiv.innerHTML = textContent;
-                                */
+
 // 清空舊內容
 bibleTextDiv.innerHTML = "";
 
@@ -88,24 +86,22 @@ bibleTextDiv.innerHTML = "";
 const currentBook = bookSelect.value;
 const currentChapter = chapterButton.textContent;
 
-// ===== 宣告變數用於追蹤選中的經文段落 =====
-let selectedVerseElement = null;
+
 
 // ===== 動態產生經文段落 =====
 chapterVerses.forEach((verse, index) => {
     const verseElement = document.createElement("p");
     verseElement.textContent = verse;
 
-    // ===== 點擊高亮功能 =====
+    // ===== 點擊高亮功能 + 更新 selectedVerseElement =====
     verseElement.addEventListener("click", function () {
-        // 先移除所有段落的 selected 樣式
+        // 移除所有段落的 selected 樣式
         bibleTextDiv.querySelectorAll("p").forEach(v => v.classList.remove("selected"));
-        // 再加上當前段落的 selected 樣式
+        // 為當前段落加上 selected 樣式
         verseElement.classList.add("selected");
-
-        // 記錄目前選中的段落
-        selectedVerseElement = verseElement;    
-    });
+        // 更新全域變數 selectedVerseElement
+        selectedVerseElement = verseElement;
+    });    
 
     // ===== 長按複製功能（整合條件）=====
     let longPressTimer;
@@ -113,11 +109,10 @@ chapterVerses.forEach((verse, index) => {
     let isMoved = false;
 
     verseElement.addEventListener("touchstart", function(e) {
-        // 只處理單點觸控
-        if (e.touches.length !== 1) return;
+        if (e.touches.length !== 1) return; // 只處理單點觸控
 
-        // 若目前長按的段落不是已選中的段落，則不執行
-        if (verseElement !== selectedVerseElement) {
+        // 若 selectedVerseElement 為 null（未點擊過任何段落）或非高亮段落 → 不執行
+        if (selectedVerseElement === null || verseElement !== selectedVerseElement) {
             return;
         }
 
@@ -135,35 +130,36 @@ chapterVerses.forEach((verse, index) => {
             }
         }, 2000);
 
-        // 設置滑動監聽
+        // 處理滑動事件
         const moveHandler = (e) => {
-            const currentTouch = e.touches[0];
-            const deltaX = Math.abs(currentTouch.clientX - touchStartX);
-            const deltaY = Math.abs(currentTouch.clientY - touchStartY);
+        const currentTouch = e.touches[0];
+        const deltaX = Math.abs(currentTouch.clientX - touchStartX);
+        const deltaY = Math.abs(currentTouch.clientY - touchStartY);
 
-            if (deltaX > 10 || deltaY > 10) {
-                isMoved = true;
-                clearTimeout(longPressTimer);
-                verseElement.removeEventListener("touchmove", moveHandler);
-            }
-        };
-
-        // 綁定滑動監聽
-        verseElement.addEventListener("touchmove", moveHandler);
-
-        // 觸控結束時清除計時器和監聽器
-        verseElement.addEventListener("touchend", function() {
+        if (deltaX > 10 || deltaY > 10) {
+            isMoved = true;
             clearTimeout(longPressTimer);
-            verseElement.removeEventListener("touchmove", moveHandler);
-        });
+            verseElement.removeEventListener("touchmove", moveHandler); // 立即移除監聽器
+        }
+    };
+
+    verseElement.addEventListener("touchmove", moveHandler);
+
+    verseElement.addEventListener("touchend", function() {
+        clearTimeout(longPressTimer);
+        verseElement.removeEventListener("touchmove", moveHandler);
+    });
+
+
+
     });
 
     // ===== 滑鼠右鍵複製功能 =====
     verseElement.addEventListener("contextmenu", (e) => {
-        e.preventDefault(); // 防止彈出選單
+        e.preventDefault();
 
-        // 若目前右鍵點擊的段落不是已選中的段落，則不執行複製
-        if (verseElement !== selectedVerseElement) {
+        // 若 selectedVerseElement 為 null（未點擊過任何段落）或非高亮段落 → 不執行複製
+        if (selectedVerseElement === null || verseElement !== selectedVerseElement) {
             return;
         }
 
