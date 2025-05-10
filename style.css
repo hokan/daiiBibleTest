@@ -45,7 +45,7 @@ main {
     padding: 0.2 rem;
     border-left: 4px solid transparent;
     transition: background-color 0.3s, border-color 0.3s;
-    touch-action: manipulation; /* 優化觸控響應 */
+    touch-action: none; /* 禁用所有默認觸控行為 */
     user-select: none;          /* 防止文字選中 */
 }
 
@@ -53,7 +53,7 @@ main {
     background-color:  #ffffcc; /* #fffbe6; */
     border-color: #f5c518;
     user-select: text; /* 允許選中高亮文字 */
-    touch-action: auto; 
+    touch-action: auto; /* 允許高亮段落響應 */
 }
 
 #copy-toast {

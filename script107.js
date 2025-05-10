@@ -104,7 +104,7 @@ chapterVerses.forEach((verse, index) => {
         // 為當前段落加上 selected 樣式
         verseElement.classList.add("selected");
         // 更新全域變數 selectedVerseElement
-        selectedVerseElement = verseElement;
+        selectedVerseElement = this; // 使用 this 取代 verseElement
     });    
 
     // ===== 長按複製功能（整合條件）=====
@@ -123,9 +123,10 @@ chapterVerses.forEach((verse, index) => {
         
         if (!isHighlighted) {
             console.log('非高亮區域，拒絕處理觸控事件', {
-                selected: selectedVerseElement,
-                current: this,
-                hasClass: this.classList.contains('selected')
+                記錄的元素: selectedVerseElement ? selectedVerseElement.textContent : null,
+                當前元素: this.textContent,
+                類別狀態: this.classList.contains('selected'),
+                isSameElement: this === selectedVerseElement
             });
             return;
         }
