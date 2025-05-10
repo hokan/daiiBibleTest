@@ -112,52 +112,65 @@ chapterVerses.forEach((verse, index) => {
     let touchStartX, touchStartY;
     let isMoved = false;
 
-    verseElement.addEventListener("touchstart", function(e) {
-        if (e.touches.length !== 1) return; // 只處理單點觸控
-
-        // 強化條件檢查 (確保是已選中段落)
-        if (!selectedVerseElement || verseElement !== selectedVerseElement) {
-            console.log('非高亮區域，取消長按操作');
-            return;
+    // ===== 修改後的長按複製功能 (整合滑動檢測) =====
+        verseElement.addEventListener("touchstart", function(e) {
+        // 優先檢查是否為高亮段落 (雙重驗證)
+        if (!selectedVerseElement || this !== selectedVerseElement) {
+            console.log('非高亮區域，拒絕處理觸控事件');
+            return; // 立即終止函式
         }
+    
+        // 檢查單指觸控
+        if (e.touches.length !== 1) return;
 
-        // 記錄起始座標
-        const touch = e.touches[0];
-        touchStartX = touch.clientX;
-        touchStartY = touch.clientY;
-        isMoved = false;
+        // 初始化滑動檢測參數
+        let touchStartX = e.touches[0].clientX;
+        let touchStartY = e.touches[0].clientY;
+        let isMoved = false;
+        let longPressTimer;
 
-        // 啟動2秒計時器
+        // 定義滑動檢測函式
+        const handleMove = (e) => {
+            const currentX = e.touches[0].clientX;
+            const currentY = e.touches[0].clientY;
+            const deltaX = Math.abs(currentX - touchStartX);
+            const deltaY = Math.abs(currentY - touchStartY);
+
+            // 滑動超過5px即判定為取消
+            if (deltaX > 5 || deltaY > 5) {
+                isMoved = true;
+                clearTimeout(longPressTimer);
+                removeEventListeners(); // 立即清除監聽
+            }
+        };
+
+        // 定義結束處理函式
+        const handleEnd = () => {
+            clearTimeout(longPressTimer);
+            removeEventListeners();
+        };
+
+        // 統一清除監聽器
+        const removeEventListeners = () => {
+            verseElement.removeEventListener('touchmove', handleMove);
+            verseElement.removeEventListener('touchend', handleEnd);
+        };
+
+        // 設定計時器
         longPressTimer = setTimeout(() => {
             if (!isMoved) {
                 const fullVerse = `${currentBook}${verse}`;
                 copyToClipboard(fullVerse);
             }
-        }, 2000);
+            removeEventListeners();
+        }, 1000); // 調整為1秒觸發
 
-        // 處理滑動事件
-        const moveHandler = (e) => {
-        const currentTouch = e.touches[0];
-        const deltaX = Math.abs(currentTouch.clientX - touchStartX);
-        const deltaY = Math.abs(currentTouch.clientY - touchStartY);
-
-        if (deltaX > 10 || deltaY > 10) {
-            isMoved = true;
-            clearTimeout(longPressTimer);
-            verseElement.removeEventListener("touchmove", moveHandler); // 立即移除監聽器
-        }
-    };
-
-    verseElement.addEventListener("touchmove", moveHandler);
-
-    verseElement.addEventListener("touchend", function() {
-        clearTimeout(longPressTimer);
-        verseElement.removeEventListener("touchmove", moveHandler);
+        // 綁定事件監聽
+        verseElement.addEventListener('touchmove', handleMove);
+        verseElement.addEventListener('touchend', handleEnd);
     });
 
 
-
-    });
 
     // ===== 滑鼠右鍵複製功能 =====
     verseElement.addEventListener("contextmenu", (e) => {
