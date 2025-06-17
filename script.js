@@ -5,7 +5,7 @@ let bibleData; // 宣告 bibleData 變數，用於儲存從 JSON 檔案載入的
 document.addEventListener('DOMContentLoaded', function() {
 
     // ** 載入 JSON 聖經資料庫 **
-    fetch('bible_data.json') // 使用 fetch API 發送 HTTP GET 請求載入 bible_data.json 檔案
+    fetch('bible_data0523.json') // 使用 fetch API 發送 HTTP GET 請求載入 bible_data.json 檔案
         .then(response => response.json()) // 將 response 物件轉換成 JSON 資料
         .then(data => {
             bibleData = data; // 將解析後的 JSON 資料賦值給 bibleData 變數
@@ -50,94 +50,25 @@ document.addEventListener('DOMContentLoaded', function() {
                             const selectedChapter = chapterButton.textContent;
                             const bibleTextDiv = document.getElementById('bibleText');
 
-                            // 新增滚动位置重置
-                            bibleTextDiv.scrollTop = 0; // <-- 新增此行                            
-                            
+                            // 只保留一個渲染方式 (移除 displayChapter 或下方的渲染程式碼)
                             if (bibleData[selectedBook] && bibleData[selectedBook][selectedChapter]) {
-                                // 改用createDocumentFragment优化
-                                const fragment = document.createDocumentFragment();
-                                bibleData[selectedBook][selectedChapter].forEach(verse => {
-                                    const p = document.createElement('p');
-                                    p.textContent = verse;
-                                    fragment.appendChild(p);
+                                const chapterVerses = bibleData[selectedBook][selectedChapter];
+                                let textContent = "";
+                                chapterVerses.forEach(verse => {
+                                    textContent += `<p>${verse}</p>`;
                                 });
-                                
-                                // 清空并添加新内容
-                                bibleTextDiv.innerHTML = '';
-                                bibleTextDiv.appendChild(fragment);
-                                
+                                bibleTextDiv.innerHTML = textContent;
 
-                                // 綁定事件的新寫法
-                                const verses = bibleTextDiv.querySelectorAll('p');
-                                
-                                // 修改點擊高亮處理函數
-                                const handleClick = (clickedVerse) => {
-                                    // 添加防抖處理
-                                    if (this.clickTimeout) clearTimeout(this.clickTimeout);
-                                    
-                                    // 立即移除其他高亮
-                                    verses.forEach(v => {
-                                        if (v !== clickedVerse) v.classList.remove('selected');
+                                // 綁定點擊事件到新生成的經文段落
+                                bibleTextDiv.querySelectorAll('p').forEach(verseElement => {
+                                    verseElement.addEventListener('click', function() {
+                                      // 重新查詢所有經文段落，避免閉包問題
+                                      bibleTextDiv.querySelectorAll('p').forEach(v => v.classList.remove('selected'));
+                                      verseElement.classList.add('selected');
                                     });
-                                    
-                                    // 延遲添加高亮以區分滾動操作
-                                    this.clickTimeout = setTimeout(() => {
-                                        clickedVerse.classList.add('selected');
-                                    }, 50); // 50ms 延遲可區分輕觸與滾動
-                                };
-                                // 修改事件綁定方式 (替換原有綁定代碼)
-                                verses.forEach(verseElement => {
-                                    // 統一使用 touchstart 事件
-                                    verseElement.addEventListener('touchstart', (e) => {
-                                        e.preventDefault();
-                                        handleClick(verseElement);
-                                    }, { passive: false });
-                                    
-                                    // 保留桌面端 click 事件
-                                    verseElement.addEventListener('click', () => handleClick(verseElement));
                                 });
-                        
-                                // 長按複製處理 (保持原有不變)
-                                /*
-                                const handleLongPress = (verseElement) => {
-                                    let pressTimer;
-                                    
-                                    const startHandler = (e) => {
-                                        e.preventDefault();
-                                        pressTimer = setTimeout(() => {
-                                            const text = verseElement.textContent;
-                                            navigator.clipboard.writeText(text)
-                                                .then(() => showCopiedToast())
-                                                .catch(err => console.error('複製失敗:', err));
-                                        }, 600);
-                                    };
-                        
-                                    const endHandler = () => {
-                                        clearTimeout(pressTimer);
-                                    };
-                        
-                                    // 觸控事件
-                                    verseElement.addEventListener('touchstart', startHandler);
-                                    verseElement.addEventListener('touchend', endHandler);
-                                    
-                                    // 滑鼠事件
-                                    verseElement.addEventListener('mousedown', startHandler);
-                                    verseElement.addEventListener('mouseup', endHandler);
-                                    verseElement.addEventListener('mouseleave', endHandler);
-                                };
-                                */
-
-                        
-                                // 綁定事件
-                                verses.forEach(verseElement => {
-                                    // 點擊事件
-                                    verseElement.addEventListener('click', () => handleClick(verseElement));
-                                    
-                                    // 長按事件
-                                    // handleLongPress(verseElement);
-                                });
+                                  
                             }
-
                         });
 
                         chapterButtonsDiv.appendChild(chapterButton); // 將章節按鈕添加到章節按鈕容器
@@ -179,37 +110,3 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 });
-
-// 在檔案最外層新增以下函式
-function showCopiedToast() {
-    const toast = document.createElement('div');
-    toast.className = 'toast';
-    toast.textContent = '已複製';
-    document.body.appendChild(toast);
-    
-    // 觸發瀏覽器重排以應用動畫
-    void toast.offsetWidth;
-    toast.classList.add('show');
-    
-    setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => toast.remove(), 300); // 等待動畫結束後移除元素
-    }, 3000);
-}
-
-// 在文件末尾添加以下代码
-let touchStartY = 0;
-const bibleTextDiv = document.getElementById('bibleText');
-/*
-bibleTextDiv.addEventListener('touchstart', e => {
-    touchStartY = e.touches[0].clientY;
-}, { passive: true });
-
-bibleTextDiv.addEventListener('touchmove', e => {
-    const touchY = e.touches[0].clientY;
-    // 垂直滑动检测
-    if (Math.abs(touchY - touchStartY) > 10) {
-        e.stopPropagation();
-    }
-}, { passive: false });
-*/

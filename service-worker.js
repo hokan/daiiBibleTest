@@ -2,8 +2,8 @@ const CACHE_NAME = 'bible-app-cache-v1';
 const FILES_TO_CACHE = [
   'index.html',
   'style.css',
-  'script105.js',
-  'bible_data.json',
+  'script.js',
+  'bible_data0523.json',
   'images/icon-192x192.png',
   'images/icon-512x512.png'
 ];

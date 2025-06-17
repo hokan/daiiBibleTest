@@ -1,19 +1,7 @@
-
 body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f9f9f9;
-    color: #333;
+    font-family: sans-serif;
+    padding: 8px; /* 文字四周空白改小 */
     font-size: 1.2rem; /*  設定 body 預設字體大小為 1.1rem */
-
-}
-
-header {
-    background-color: #4a90e2;
-    color: white;
-    padding: 1rem;
-    text-align: center;
 }
 
 h1 { /* 台語快讀聖經 v1.0 */
@@ -22,58 +10,21 @@ h1 { /* 台語快讀聖經 v1.0 */
     margin-top: 5px;  /*  修改後的上邊距設定，縮小為一半 (15px)  */
 }
 
-.controls {
-    margin-top: 0.5rem;
-}
-
-label, select {
-    margin: 0 0.5rem;
-}
-
-main {
-    padding: 1rem;
-}
-
-#chapterTitle {
-    text-align: center;
-    margin-bottom: 1rem;
+p.selected {
+    background-color: #ffffcc !important; /* 強制覆蓋其他樣式 */
+    user-select: none; /* 禁用文字選取效果 */
 }
 
 #bibleText p {
-    line-height: 1.4; /* 1.6 */
-    margin: 0.2rem 0;
-    padding: 0.2 rem;
-    border-left: 4px solid transparent;
-    transition: background-color 0.3s, border-color 0.3s;
-    /* 強化觸控限制 */
-    touch-action: none !important;
-    -webkit-touch-callout: none !important;
-    user-select: none !important;
-    pointer-events: auto !important; /* 強制啟用指針事件 */
+    margin-top: 0em;      /* 新增：設定上外邊距為 0 */
+    margin-bottom: 0.1em;   /* 保持原設定：設定下外邊距為 0 */
+    user-select: none; /* 全域禁用經文段落文字選取 */
 }
 
-#bibleText p.selected {
-    background-color:  #ffffcc; /* #fffbe6; */
-    border-color: #f5c518;
-    /* 僅允許高亮段落響應 */
-    touch-action: auto !important;
-    user-select: text !important;
-    isolation: isolate; /* 防止層疊上下文影響 */
+#bibleText {
+    border: none; /* 1px solid #ccc;  外框樣式設定 */
+    padding: 0px;
+    margin-top: 5px;
+    line-height: 1.6; /* 增加行距 */
 }
 
-#copy-toast {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    z-index: 9999;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-  #copy-toast.show {
-    opacity: 1;
-  }
