@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 });
                                 bibleTextDiv.innerHTML = textContent;
 
-                                // 綁定點擊事件到新生成的經文段落
+/*                                // 綁定點擊事件到新生成的經文段落
                                 bibleTextDiv.querySelectorAll('p').forEach(verseElement => {
                                     verseElement.addEventListener('click', function() {
                                       // 重新查詢所有經文段落，避免閉包問題
@@ -67,7 +67,23 @@ document.addEventListener('DOMContentLoaded', function() {
                                       verseElement.classList.add('selected');
                                     });
                                 });
-                                  
+*/
+// 綁定點擊事件到新生成的經文段落
+                                bibleTextDiv.querySelectorAll('p').forEach(verseElement => {
+                                    verseElement.addEventListener('click', function() {
+                                        // 檢查被點擊的經文是否已經是 'selected' 狀態
+                                        const isAlreadySelected = verseElement.classList.contains('selected');
+
+                                        // 先移除所有經文的 'selected' class，確保單選的行為
+                                        bibleTextDiv.querySelectorAll('p').forEach(v => v.classList.remove('selected'));
+
+                                        // 如果被點擊的經文原本沒有被選中，才將它加上 'selected' class
+                                        // 如果它原本已經被選中，那在上面移除後，這裡就不會再加回去，達成取消高亮的效果
+                                        if (!isAlreadySelected) {
+                                            verseElement.classList.add('selected');
+                                        }
+                                    });
+                                });                                  
                             }
                         });
 
