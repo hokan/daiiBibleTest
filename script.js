@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         // ** 章節按鈕點擊事件監聽器 **
                         // 修改章節按鈕的點擊事件處理
                         chapterButton.addEventListener('click', function() {
-                            const selectedBook = bookSelect.value;
+                            //*0619* const selectedBook = bookSelect.value;
                             const selectedChapter = chapterButton.textContent;
                             const bibleTextDiv = document.getElementById('bibleText');
 
@@ -68,7 +68,16 @@ document.addEventListener('DOMContentLoaded', function() {
                                     });
                                 });
 */
-// 綁定點擊事件到新生成的經文段落
+                                // 建立提示視窗元素（只加一次）
+                                let copyToast = document.getElementById('copy-toast');
+                                if (!copyToast) {
+                                    copyToast = document.createElement('div');
+                                    copyToast.id = 'copy-toast';
+                                    copyToast.textContent = '已複製';
+                                    document.body.appendChild(copyToast);
+                                }
+/*
+                                // 綁定點擊事件到新生成的經文段落
                                 bibleTextDiv.querySelectorAll('p').forEach(verseElement => {
                                     verseElement.addEventListener('click', function() {
                                         // 檢查被點擊的經文是否已經是 'selected' 狀態
@@ -83,7 +92,43 @@ document.addEventListener('DOMContentLoaded', function() {
                                             verseElement.classList.add('selected');
                                         }
                                     });
-                                });                                  
+                                });
+*/        
+                                // 綁定每一節經文的點擊與長按事件
+                                bibleTextDiv.querySelectorAll('p').forEach(verseElement => {
+                                    verseElement.addEventListener('click', function () {
+                                        const isAlreadySelected = verseElement.classList.contains('selected');
+                                        bibleTextDiv.querySelectorAll('p').forEach(v => v.classList.remove('selected'));
+                                        if (!isAlreadySelected) {
+                                            verseElement.classList.add('selected');
+                                        }
+                                    });
+
+                                    let longPressTimer;
+                                    const startLongPress = () => {
+                                        if (!verseElement.classList.contains('selected')) return;
+                                        longPressTimer = setTimeout(() => {
+                                            const text = verseElement.textContent.trim();
+                                            navigator.clipboard.writeText(text).then(() => {
+                                                copyToast.style.display = 'block';
+                                                setTimeout(() => {
+                                                    copyToast.style.display = 'none';
+                                                }, 2000);
+                                            });
+                                        }, 600); // 600ms 長按觸發
+                                    };
+                                    const cancelLongPress = () => clearTimeout(longPressTimer);
+
+                                    // 桌機滑鼠支援
+                                    verseElement.addEventListener('mousedown', startLongPress);
+                                    verseElement.addEventListener('mouseup', cancelLongPress);
+                                    verseElement.addEventListener('mouseleave', cancelLongPress);
+
+                                    // 手機觸控支援
+                                    verseElement.addEventListener('touchstart', startLongPress);
+                                    verseElement.addEventListener('touchend', cancelLongPress);
+                                    verseElement.addEventListener('touchmove', cancelLongPress);
+                                });                          
                             }
                         });
 
