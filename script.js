@@ -5,7 +5,7 @@ let bibleData; // 宣告 bibleData 變數，用於儲存從 JSON 檔案載入的
 document.addEventListener('DOMContentLoaded', function() {
 
     // ** 載入 JSON 聖經資料庫 **
-    fetch('bible_data251130d.json') // 使用 fetch API 發送 HTTP GET 請求載入 bible_data.json 檔案
+    fetch('bible_data251130e.json') // 使用 fetch API 發送 HTTP GET 請求載入 bible_data.json 檔案
         .then(response => response.json()) // 將 response 物件轉換成 JSON 資料
         .then(data => {
             bibleData = data; // 將解析後的 JSON 資料賦值給 bibleData 變數
